@@ -1,5 +1,5 @@
 import { create, type StateCreator } from "zustand";
-import { createJSONStorage, persist } from "zustand/middleware";
+import { createJSONStorage, devtools, persist } from "zustand/middleware";
 
 interface IActions {
     increaseCount: () => void;
@@ -16,18 +16,25 @@ const initialState: IInitialState = {
     color: "purple",
 };
 
-const counterStore: StateCreator<ICounterState> = (set) => ({
+const counterStore: StateCreator<
+    ICounterState,
+    [["zustand/devtools", never], ["zustand/persist", unknown]]
+> = (set) => ({
     ...initialState,
-    increaseCount: () => set((state) => ({ value: state.value + 1 })),
-    decreaseCount: () => set((state) => ({ value: state.value - 1 })),
+    increaseCount: () =>
+        set((state) => ({ value: state.value + 1 }), false, "incr"),
+    decreaseCount: () =>
+        set((state) => ({ value: state.value - 1 }), false, "decr"),
 });
 
 export const useCounter = create<ICounterState>()(
-    persist(counterStore, {
-        name: "zustandCount",
-        storage: createJSONStorage(() => localStorage),
-        partialize: (state) => ({ value: state.value }),
-    }),
+    devtools(
+        persist(counterStore, {
+            name: "zustandCount",
+            storage: createJSONStorage(() => localStorage),
+            partialize: (state) => ({ value: state.value }),
+        }),
+    ),
 );
 
 export const useGetCount = () => useCounter((state) => state.value);
