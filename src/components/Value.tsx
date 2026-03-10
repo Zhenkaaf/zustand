@@ -1,4 +1,4 @@
-import { useCounter, useGetCount } from "../store/useCounter";
+import { useCounter, useGetCount } from "../store/useCounterStore";
 
 const Value = () => {
     const count = useCounter((state) => state.value);

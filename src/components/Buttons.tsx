@@ -2,14 +2,13 @@ import {
     decreaseCountFn,
     increaseCountFn,
     useCounter,
-} from "../store/useCounter";
+} from "../store/useCounterStore";
 
 /* type PropsType = {
     onIncrement: () => void;
     onDecrement: () => void;
 }; */
 const Buttons = () => {
-    console.log("BUTTONS");
     const onIncrement = useCounter((state) => state.increaseCount);
     const onDecrement = useCounter((state) => state.decreaseCount);
     return (
